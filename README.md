@@ -4,7 +4,17 @@ This is, obviously, very much a WIP. Don't expect stuff to work or even necessar
 The point of this branch is to try to move towards a fairly-explicit set of goals for how 
 catnip should be "shaped."
 
-Adapted list of stuff from the Discord conversation that I wanna try to get done:
+### What is this not?
+
+A full rewrite of the lib.
+
+### What is this actually?
+
+Using the base that we already have to make a better lib. Never stop improving and all that.
+
+## TODO list
+
+Adapted list of stuff from the one Discord conversation that I wanna try to get done:
 
 - Java 11+ only
 - Get rid of vert.x
@@ -17,6 +27,32 @@ Adapted list of stuff from the Discord conversation that I wanna try to get done
 - Properly submodule out gateway / REST handling
 - Possibly make a "blessed" command-handling module
 - ...
+
+## What are all these modules?????????
+
+Module name          | Description
+---------------------|--------------------------------------------------
+`catnip-metadata`    | Metadata about catnip, like version number.
+`catnip-utils`       | Utility classes used throughout catnip.
+`catnip-data`        | A data-only Discord entity package.
+`catnip-entity-spec` | The "spec" that all more-than-data entities must follow. Basically just lays out what convenience methods your entity package should implement. If you wanna bring your own entity classes for some reason, you should implement the stuff in this module.
+`catnip-entities`    | The "built-in" implementation of `catnip-entity-spec`.
+`catnip-rest`        | The "spec" for how REST implementations work. Implements the majority of the logic around REST requesting, ratelimiting, etc. Calls out to an implementation "package" where needed.
+`catnip-gateway`     | Like `catnip-rest` but for the gateway.
+
+### Modules and other stuff that hasn't been decided on yet
+
+- The "default" / "blessed" reactive-streams implementation to use as the default for
+  `catnip-rest`/`catnip-gateway` implementations. I wanna say just RxJava2
+  (`catnip-gateway-rx`/`catnip-rest-rx`) but open to suggestions. My main concern with
+  this is that it would be nice to be able to be like... Pick an implementation and be
+  able to just `ReactiveWhatever thing = catnip.rest().whatever();`, ie. returning an
+  `Observable` or `Flowable` for Rx, a `Single` or `Flux` or whatever else for Project
+  Reactor, ... Not sure how possible this is to do, sadly...
+- Event loops? :blobcatsweats: Kind of a big issue
+- How to provide deeper hooks / more extension use-cases in general?
+- Should we bake in a commands module? If yes, how should it behave?
+- How I'm gonna keep my sanity through this whole thing...
 
 # catnip
 
