@@ -40,7 +40,7 @@ Module name          | Description
 `catnip-utils`       | Utility classes used throughout catnip.
 `catnip-data`        | A data-only Discord entity package.
 `catnip-entity-spec` | The "spec" that all more-than-data entities must follow. Basically just lays out what convenience methods your entity package should implement. If you wanna bring your own entity classes for some reason, you should implement the stuff in this module.
-`catnip-entities`    | The "built-in" implementation of `catnip-entity-spec`.
+`catnip-entities`    | The "built-in" implementation of `catnip-entity-spec`. Works off of `catnip-data`.
 `catnip-rest`        | The "spec" for how REST implementations work. Implements the majority of the logic around REST requesting, ratelimiting, etc. Calls out to an implementation "package" where needed.
 `catnip-gateway`     | Like `catnip-rest` but for the gateway.
 
