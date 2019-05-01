@@ -10,7 +10,7 @@ while still giving you a single interface to use everything (ie. like how it is 
 
 A full rewrite of the lib.
 
-### What is this actually?
+### What is this, then?
 
 Using the base that we already have to make a better lib. Never stop improving and all that.
 
