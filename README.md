@@ -1,3 +1,23 @@
+# catnip v2 branch
+
+This is, obviously, very much a WIP. Don't expect stuff to work or even necessarily make sense.
+The point of this branch is to try to move towards a fairly-explicit set of goals for how 
+catnip should be "shaped."
+
+Adapted list of stuff from the Discord conversation that I wanna try to get done:
+
+- Java 11+ only
+- Get rid of vert.x
+- Entity data is a separate module, immutables-only
+- No helper/utility/convenience methods on entity data package - that has to be a separate thing.
+- Core uses `reactive-streams` only for exposting the external interface - no more `Catnip#on` or similar
+- Separate modules that drag in Akka or Project Reactor or RxJava2 or whatever the fuck else you want
+- Ratelimiting is just backpressured streams, not buckets like we have now. Would depend on how well this allows sharing ratelimit data tho
+- Make it possible to plug in your own gateway handling stuff so you can ex. write in ETF or zstd-stream support as an extension
+- Properly submodule out gateway / REST handling
+- Possibly make a "blessed" command-handling module
+- ...
+
 # catnip
 
 [![CircleCI](https://circleci.com/gh/mewna/catnip.svg?style=svg)](https://circleci.com/gh/mewna/catnip)
