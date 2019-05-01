@@ -2,7 +2,9 @@
 
 This is, obviously, very much a WIP. Don't expect stuff to work or even necessarily make sense.
 The point of this branch is to try to move towards a fairly-explicit set of goals for how 
-catnip should be "shaped."
+catnip should be "shaped." catnip v1 already allows for "modular" usage; what I'm aiming
+for here is something that allows modular usage and only using the dependencies you need,
+while still giving you a single interface to use everything (ie. like how it is now).
 
 ### What is this not?
 
