@@ -25,31 +25,43 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.message;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 /**
  * @author amy
- * @since 5/1/19.
+ * @since 9/4/18.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+public enum MessageType {
+    DEFAULT(0),
+    RECIPIENT_ADD(1),
+    RECIPIENT_REMOVE(2),
+    CALL(3),
+    CHANNEL_NAME_CHANGE(4),
+    CHANNEL_ICON_CHANGE(5),
+    CHANNEL_PINNED_MESSAGE(6),
+    GUILD_MEMBER_JOIN(7),
+    ;
+    private final int id;
+    
+    MessageType(final int id) {
+        this.id = id;
+    }
+    
+    @Nonnull
+    @CheckReturnValue
+    public static MessageType byId(final int id) {
+        for(final MessageType m : values()) {
+            if(m.id == id) {
+                return m;
+            }
+        }
+        throw new IllegalArgumentException("No such MessageType: " + id);
+    }
+    
+    public int getId() {
+        return id;
+    }
 }

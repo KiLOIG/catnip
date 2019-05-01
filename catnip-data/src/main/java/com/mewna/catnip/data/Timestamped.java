@@ -27,29 +27,17 @@
 
 package com.mewna.catnip.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.Nullable;
+import java.time.OffsetDateTime;
 
 /**
+ * An entity that has a timestamp.
+ *
  * @author amy
- * @since 5/1/19.
+ * @since 10/28/18.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+public interface Timestamped {
+    default OffsetDateTime parseTimestamp(@Nullable final CharSequence raw) {
+        return raw == null ? null : OffsetDateTime.parse(raw);
+    }
 }

@@ -24,32 +24,37 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+package com.mewna.catnip.data.guild;
 
-package com.mewna.catnip.data;
+import com.mewna.catnip.data.Entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 /**
- * @author amy
- * @since 5/1/19.
+ * An entity which is guild-scoped in catnip.
+ *
+ * @author AdrianTodt
+ * @since 1/19/19.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+public interface GuildEntity extends Entity {
+    
+    /**
+     * The id of the guild this entity is from.
+     *
+     * @return String representing the guild ID.
+     */
+    @Nonnull
+    @CheckReturnValue
+    default String guildId() {
+        return Long.toUnsignedString(guildIdAsLong());
+    }
+    
+    /**
+     * The id of the guild this entity is from.
+     *
+     * @return Long representing the guild ID.
+     */
+    @CheckReturnValue
+    long guildIdAsLong();
 }

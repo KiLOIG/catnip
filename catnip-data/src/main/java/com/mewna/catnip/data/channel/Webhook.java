@@ -25,31 +25,69 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.channel;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.mewna.catnip.data.CatnipEntity;
+import com.mewna.catnip.data.Snowflake;
+import com.mewna.catnip.data.guild.GuildEntity;
+import com.mewna.catnip.data.user.User;
+import org.immutables.value.Value.Modifiable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 /**
- * @author amy
- * @since 5/1/19.
+ * A webhook on a channel. Allows sending messages to a text channel in a guild
+ * without having to have a bot application.
+ *
+ * @author natanbc
+ * @since 9/15/18
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+@SuppressWarnings("unused")
+@Modifiable
+@CatnipEntity
+public interface Webhook extends GuildEntity, Snowflake {
+    /**
+     * @return The id of the channel this webhook is for.
+     */
+    @Nonnull
+    @CheckReturnValue
+    default String channelId() {
+        return Long.toUnsignedString(channelIdAsLong());
+    }
+    
+    /**
+     * @return The id of the channel this webhook is for.
+     */
+    @CheckReturnValue
+    long channelIdAsLong();
+    
+    /**
+     * @return The user that created this webhook.
+     */
+    @Nonnull
+    @CheckReturnValue
+    User user();
+    
+    /**
+     * @return The name of this webhook.
+     */
+    @Nullable
+    @CheckReturnValue
+    String name();
+    
+    /**
+     * @return The default avatar of the webhook.
+     */
+    @Nullable
+    @CheckReturnValue
+    String avatar();
+    
+    /**
+     * @return The secure token of the webhook.
+     */
+    @Nonnull
+    @CheckReturnValue
+    String token();
 }

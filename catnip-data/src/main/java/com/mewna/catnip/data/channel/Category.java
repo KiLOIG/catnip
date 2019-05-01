@@ -25,31 +25,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.channel;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.mewna.catnip.data.CatnipEntity;
+import org.immutables.value.Value.Modifiable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
 
 /**
- * @author amy
- * @since 5/1/19.
+ * A category that contains channels in a guild.
+ *
+ * @author natanbc
+ * @since 9/12/18
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+@Modifiable
+@CatnipEntity
+public interface Category extends GuildChannel {
+    @Override
+    @CheckReturnValue
+    default boolean isText() {
+        return false;
+    }
+    
+    @Override
+    @CheckReturnValue
+    default boolean isVoice() {
+        return false;
+    }
+    
+    @Override
+    @CheckReturnValue
+    default boolean isCategory() {
+        return true;
+    }
 }

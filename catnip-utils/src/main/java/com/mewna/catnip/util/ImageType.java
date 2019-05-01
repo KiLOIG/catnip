@@ -25,31 +25,32 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.util;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 /**
- * @author amy
- * @since 5/1/19.
+ * @author natanbc
+ * @since 9/2/18.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+public enum ImageType {
+    GIF, JPG, PNG, WEBP;
+    
+    @Nonnull
+    @CheckReturnValue
+    public static ImageType fromExtension(@Nonnull final String extension) {
+        for(final ImageType type : values()) {
+            if(type.getFileExtension().equalsIgnoreCase(extension)) {
+                return type;
+            }
+        }
+        throw new IllegalArgumentException("No matching file type for extension " + extension);
+    }
+    
+    @Nonnull
+    @CheckReturnValue
+    public String getFileExtension() {
+        return name().toLowerCase();
+    }
 }

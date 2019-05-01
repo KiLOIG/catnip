@@ -25,31 +25,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.guild;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.mewna.catnip.data.CatnipEntity;
+import com.mewna.catnip.data.Entity;
+import org.immutables.value.Value.Modifiable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nullable;
 
 /**
- * @author amy
- * @since 5/1/19.
+ * A guild's embed.
+ *
+ * @author SamOphis
+ * @since 10/18/2018
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+@SuppressWarnings("unused")
+@Modifiable
+@CatnipEntity
+public interface GuildEmbed extends Entity {
+    /**
+     * @return Whether the embed is enabled.
+     */
+    @CheckReturnValue
+    boolean enabled();
+    
+    /**
+     * @return The id the embed is enabled for. {@code null} if not enabled.
+     */
+    @Nullable
+    @CheckReturnValue
+    default String channelId() {
+        final long id = channelIdAsLong();
+        if(id == 0) {
+            return null;
+        }
+        return Long.toUnsignedString(id);
+    }
+    
+    /**
+     * @return The id the embed is enabled for. {@code 0} if not enabled.
+     */
+    @CheckReturnValue
+    long channelIdAsLong();
 }

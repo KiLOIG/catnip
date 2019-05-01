@@ -25,31 +25,59 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.misc;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.mewna.catnip.data.CatnipEntity;
+import com.mewna.catnip.data.Entity;
+import org.immutables.value.Value.Modifiable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 
 /**
- * @author amy
- * @since 5/1/19.
+ * A voice region on Discord.
+ *
+ * @author natanbc
+ * @since 9/14/18
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+@Modifiable
+@CatnipEntity
+public interface VoiceRegion extends Entity {
+    /**
+     * @return The id of the voice region.
+     */
+    @Nonnull
+    @CheckReturnValue
+    String id();
+    
+    /**
+     * @return The name of the voice region.
+     */
+    @Nonnull
+    @CheckReturnValue
+    String name();
+    
+    /**
+     * @return Whether the voice region is VIP-only.
+     */
+    @CheckReturnValue
+    boolean vip();
+    
+    /**
+     * @return Whether the voice region is optimal.
+     */
+    @CheckReturnValue
+    boolean optimal();
+    
+    /**
+     * @return Whether the voice region is deprecated.
+     */
+    @CheckReturnValue
+    boolean deprecated();
+    
+    /**
+     * @return Whether the voice region is custom.
+     */
+    @CheckReturnValue
+    boolean custom();
 }

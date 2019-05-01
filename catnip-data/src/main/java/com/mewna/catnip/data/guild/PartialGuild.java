@@ -25,31 +25,54 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.guild;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mewna.catnip.data.CatnipEntity;
+import com.mewna.catnip.data.Snowflake;
+import com.mewna.catnip.util.CDNFormat;
+import com.mewna.catnip.util.ImageOptions;
+import com.mewna.catnip.util.Permission;
+import org.immutables.value.Value.Modifiable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Set;
 
 /**
- * @author amy
- * @since 5/1/19.
+ * @author natanbc
+ * @since 10/10/18.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+@Modifiable
+@CatnipEntity
+public interface PartialGuild extends Snowflake {
+    @Nonnull
+    @CheckReturnValue
+    String name();
+    
+    @Nullable
+    @CheckReturnValue
+    String icon();
+    
+    @Nullable
+    @JsonIgnore
+    @CheckReturnValue
+    default String iconUrl(@Nonnull final ImageOptions options) {
+        return CDNFormat.iconUrl(id(), icon(), options);
+    }
+    
+    @Nullable
+    @JsonIgnore
+    @CheckReturnValue
+    default String iconUrl() {
+        return iconUrl(new ImageOptions());
+    }
+    
+    @CheckReturnValue
+    boolean owned();
+    
+    @Nonnull
+    @CheckReturnValue
+    Set<Permission> permissions();
 }

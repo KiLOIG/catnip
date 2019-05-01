@@ -25,31 +25,64 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.misc;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.mewna.catnip.data.CatnipEntity;
+import com.mewna.catnip.data.Snowflake;
+import org.immutables.value.Value.Modifiable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
+ * Information about an application.
+ *
  * @author amy
- * @since 5/1/19.
+ * @since 10/17/18.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+@Modifiable
+@CatnipEntity
+public interface ApplicationInfo extends Snowflake {
+    /**
+     * @return The application's name.
+     */
+    @Nonnull
+    String name();
+    
+    /**
+     * @return The application's icon.
+     */
+    @Nullable
+    String icon();
+    
+    /**
+     * @return The application's description.
+     */
+    @Nullable
+    String description();
+    
+    /**
+     * @return A non-{@code null}, possibly-empty list of the application's RPC
+     * origins.
+     */
+    @Nonnull
+    List<String> rpcOrigins();
+    
+    /**
+     * @return Whether or not the application is a public bot.
+     */
+    boolean publicBot();
+    
+    /**
+     * @return Whether or not the application requires a code grant before the
+     * bot can be added.
+     */
+    boolean requiresCodeGrant();
+    
+    /**
+     * @return The entity that owns the application.
+     */
+    @Nonnull
+    ApplicationOwner owner();
 }

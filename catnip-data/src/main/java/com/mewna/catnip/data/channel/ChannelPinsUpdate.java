@@ -25,31 +25,47 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.channel;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.mewna.catnip.data.CatnipEntity;
+import com.mewna.catnip.data.Entity;
+import org.immutables.value.Value.Modifiable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.time.OffsetDateTime;
 
 /**
+ * Fired over the event bus when a channel's pins are updated.
+ *
  * @author amy
- * @since 5/1/19.
+ * @since 10/9/18.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+@Modifiable
+@CatnipEntity
+public interface ChannelPinsUpdate extends Entity {
+    /**
+     * @return The id of the channel that pins were updated in. Will never be
+     * {@code null}.
+     */
+    @Nonnull
+    @CheckReturnValue
+    default String channelId() {
+        return Long.toUnsignedString(channelIdAsLong());
+    }
+    
+    /**
+     * @return The id of the channel that pins were updated in.
+     */
+    @CheckReturnValue
+    long channelIdAsLong();
+    
+    /**
+     * @return The timestamp of the last pinned message in the channel. May be
+     * {@code null}.
+     */
+    @Nullable
+    @CheckReturnValue
+    OffsetDateTime lastPinTimestamp();
 }

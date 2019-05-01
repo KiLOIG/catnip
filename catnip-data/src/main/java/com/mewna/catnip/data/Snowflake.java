@@ -27,29 +27,43 @@
 
 package com.mewna.catnip.data;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.mewna.catnip.util.Utils;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import java.time.OffsetDateTime;
 
 /**
- * @author amy
- * @since 5/1/19.
+ * @author natanbc
+ * @since 5/9/18.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+public interface Snowflake extends Entity {
+    /**
+     * The ID of this snowflake.
+     *
+     * @return String representing the ID.
+     */
+    @CheckReturnValue
+    default String id() {
+        return Long.toUnsignedString(idAsLong());
+    }
+    
+    /**
+     * The ID of this snowflake, as a long.
+     *
+     * @return Long representing the ID.
+     */
+    @CheckReturnValue
+    long idAsLong();
+    
+    /**
+     * The time this snowflake was generated.
+     *
+     * @return OffsetDateTime representing when this snowflake was generated.
+     */
+    @Nonnull
+    @CheckReturnValue
+    default OffsetDateTime creationTime() {
+        return Utils.creationTimeOf(idAsLong());
+    }
 }

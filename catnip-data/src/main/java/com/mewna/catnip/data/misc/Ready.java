@@ -25,31 +25,62 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package com.mewna.catnip.data;
+package com.mewna.catnip.data.misc;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.immutables.annotate.InjectAnnotation;
-import org.immutables.annotate.InjectAnnotation.Where;
-import org.immutables.value.Value.Style;
-import org.immutables.value.Value.Style.ImplementationVisibility;
+import com.mewna.catnip.data.CatnipEntity;
+import com.mewna.catnip.data.Entity;
+import com.mewna.catnip.data.guild.UnavailableGuild;
+import com.mewna.catnip.data.user.User;
+import org.immutables.value.Value.Modifiable;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import java.util.List;
+import java.util.Set;
 
 /**
+ * Fired when a shard logs in successfully.
+ *
  * @author amy
- * @since 5/1/19.
+ * @since 10/4/18.
  */
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-@Retention(RetentionPolicy.CLASS)
-@Style(
-        typeModifiable = "Catnip*",
-        set = "*",
-        visibility = ImplementationVisibility.PUBLIC,
-        jdkOnly = true
-)
-@InjectAnnotation(type = JsonIgnoreProperties.class, code = "(\"initialized\")", target = Where.MODIFIABLE_TYPE)
-public @interface CatnipEntity {
+@Modifiable
+@CatnipEntity
+public interface Ready extends Entity {
+    /**
+     * @return The websocket gateway version.
+     */
+    @Nonnegative
+    int version();
+    
+    /**
+     * @return The user who logged in.
+     */
+    @Nonnull
+    User user();
+    
+    /**
+     * @return Debugging trace.
+     */
+    @Nonnull
+    List<String> trace();
+    
+    /**
+     * @return The list of guild snowflakes for the guidls that this shard is
+     * in.
+     */
+    @Nonnull
+    Set<UnavailableGuild> guilds();
+    
+    /**
+     * @return The id of the shard that received this event.
+     */
+    @Nonnegative
+    int shardId();
+    
+    /**
+     * @return The total number of shards connected.
+     */
+    @Nonnegative
+    int shardCount();
 }
