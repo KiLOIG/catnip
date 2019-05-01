@@ -1,5 +1,7 @@
 # catnip v2 branch
 
+This branch takes over where the `fuck-vertx` branch left off.
+
 This is, obviously, very much a WIP. Don't expect stuff to work or even necessarily make sense.
 The point of this branch is to try to move towards a fairly-explicit set of goals for how 
 catnip should be "shaped." catnip v1 already allows for "modular" usage; what I'm aiming
